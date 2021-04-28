@@ -250,4 +250,21 @@ contract DecentralizedAutonomousTrust is ContinuousOffering {
     _transferCurrency(beneficiary, reserve - fee);
     _transferCurrency(feeCollector, fee);
   }
+
+  /**
+    * @notice Rescue ERC20 tokens locked up in this contract.
+    * @param tokenContract ERC20 token contract address
+    * @param to        Recipient address
+    * @param amount    Amount to withdraw
+    * Using standard from contract Rescuable:
+    * https://etherscan.io/address/0xb7277a6e95992041568d9391d09d0122023778a2#code
+    */
+    function rescueERC20(
+        IERC20 tokenContract,
+        address to,
+        uint256 amount
+    ) external {
+        require(msg.sender == control, "CONTROL_ONLY");
+        tokenContract.safeTransfer(to, amount);
+    }
 }
